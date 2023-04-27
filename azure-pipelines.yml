@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+
+- task: Kubernetes@1
+  displayName: 'kubectl version'
+  inputs:
+    command: version
+
+- task: Kubernetes@1
+  displayName: 'kubectl create deployment'
+  inputs:
+    command: 'apply'
+    arguments: '-f k8s-deployment.yaml'
+
+- task: Kubernetes@1
+  displayName: 'kubectl create service'
+  inputs:
+    command: 'apply'
+    arguments: '-f k8s-service.yaml'
